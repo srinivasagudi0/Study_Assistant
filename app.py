@@ -10,6 +10,6 @@ st.subheader("Upload your PDF")
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 if uploaded_file is not None:
     text = pdf_to_text(uploaded_file)
-    with st.spinner("Extracting text from PDF..."):
-        st.write(text)
+    # with st.spinner("Extracting text from PDF..."):  Why is this not working idk
+    st.write(text)
 # should be good
