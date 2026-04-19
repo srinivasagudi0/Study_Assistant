@@ -32,9 +32,15 @@ def generate_flashcards(text):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo", # chnage this if you want to use a different model, but for now this is good for testing. I mean for summary it is fine.
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that generates flashcards for students. Create flashcards in JSON format with 'question' and 'answer' fields. Be concise and clear."},
-            {"role": "user", "content": f"Generate flashcards from this text:\n\n{text}\n\nReturn as a JSON array of objects with 'question' and 'answer' keys. Dont give ```json tags."}
+            {"role": "system", "content": """You are a helpful assistant that generates flashcards for students. Create flashcards in this format [
+    ("What is 2+2?", "4"),
+    ("What is the capital of France?", "Paris")
+]"""},
+            {"role": "user", "content": f"Generate flashcards from this text:\n\n{text}\n\n. Give atleast 5 flashcards. Or evem more but max is 15."}
         ]
     )
     flashcards = response.choices[0].message.content
     return flashcards
+
+a = generate_flashcards("Newtons 1stlaw")
+print(a)
