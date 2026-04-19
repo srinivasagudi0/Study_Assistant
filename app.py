@@ -70,6 +70,12 @@ def modes():
         if st.button("Next Question"):
             st.session_state.i = (st.session_state.i + 1) % len(cards); st.rerun()
         st.caption(f"Score: {st.session_state.score}")
+
+        # add a button to download the quiz questions and answers as a text file
+        if st.button("Download Quiz"):
+            quiz_text = "\n".join([f"Q: {q}\nA: {a}\n" for q, a in cards])
+            if st.download_button("Download Quiz", quiz_text, file_name="quiz.txt"):
+                st.success("Quiz downloaded successfully!")
     if mode == "Explain":
         st.write("Explain mode selected.")
         # now using explain_text function to explain the text.
