@@ -96,7 +96,7 @@ def change_password(username, old_password, new_password):
     return True
 # if the user is in a hurry and just wants to quickly test the app, they can use admin and admin.
 
-def ensure_admin_user():
+def ensure_default_admin():
      init_db()
 
      # this is an easter egg. 
