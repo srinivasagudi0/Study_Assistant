@@ -73,7 +73,7 @@ def require_login() -> None:
 require_login()
 
 def modes():
-    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question", "chat"])
+    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question", "chat", "doc stats"])
     # basically the home page.
     if mode == "Select a mode":
         st.write("Please select a mode to proceed.")
@@ -172,7 +172,23 @@ def modes():
                 a = chat_with_assistant(text, question)
                 st.subheader("Answer:")
                 st.write(a)
-                
+
+# idk this just does some super basic text stats… like counting words,
+# sentences, avg sentence length, nothing fancy at all. no api stuff,
+# literally just splitting strings and doing a couple sums. could prob
+# clean this up later but it works for now.
+    if mode == "doc stats":
+        st.write("Document Statistics mode selected.")
+        word_count = len(text.split())
+        sentence_count = len(text.split('.'))
+        avg_sentence_length = word_count / sentence_count if sentence_count else 0
+        read_time = word_count / 200  # assuming average reading speed of 200 wpm
+        st.subheader("Document Statistics:")
+        st.write(f"Word Count: {word_count}")
+        st.write(f"Sentence Count: {sentence_count}")
+        st.write(f"Average Sentence Length: {avg_sentence_length:.2f} words")
+        st.write(f"Estimated Reading Time: {read_time:.2f} minutes")
+
 # be able to take in user input as a pdf first and print out the text content of the pdf
 st.subheader("First upload your PDF, before you can ask any questions about it.")
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
