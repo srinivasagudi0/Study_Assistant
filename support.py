@@ -63,3 +63,27 @@ def explain_text(text):
     )
     explanation = response.choices[0].message.content
     return explanation
+
+def trick_questions(text):
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o", # Made this gpt-4o since it is better at explanations, but you can change it if you want.
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that generates tricky questions and answers for students. Be concise and clear. Be very simple and easy to understand."},
+            {"role": "user", "content": f"Please generate tricky questions and answers along with why, from the following text: {text}"}
+        ]
+    )
+    questions = response.choices[0].message.content
+    return questions
+
+def chat_with_assistant(text, question):
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o", # Made this gpt-4o since it is better at explanations, but you can change it if you want.
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that answers questions for students based on the provided text. Be concise and clear. Be very simple and easy to understand."},
+            {"role": "user", "content": f"Based on the following text: {text}, answer the question: {question}"}
+        ]
+    )
+    answer = response.choices[0].message.content
+    return answer   

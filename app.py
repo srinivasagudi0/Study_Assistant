@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 
-from support import pdf_to_text
+from support import pdf_to_text, trick_questions
 from support import summarize_text, generate_flashcards, explain_text
 
 st.title("Smart Study Copilot")
@@ -9,7 +9,7 @@ st.title("Smart Study Copilot")
 st.header("Welcome to Smart Study Copilot!")
 
 def modes():
-    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain"])
+    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question"])
     # basically the home page.
     if mode == "Select a mode":
         st.write("Please select a mode to proceed.")
@@ -69,6 +69,17 @@ def modes():
             explanation = explain_text(text)
             st.subheader("Explanation:")
             st.write(explanation)
+    if mode == "Trick Question":
+        st.write("Trick Question mode selected.")
+        if st.button("Generate trick questions"):
+        # now using trick_questions function to generate trick questions from the text.
+            with st.spinner("Generating trick questions..."):
+                trick_qs = trick_questions(text)
+                st.subheader("Trick Questions:")
+                st.write(trick_qs)
+    if mode == "chat":
+        st.write("Chat mode selected.")
+        st.write("This mode is still under development. Please check back later.")
                 
 # be able to take in user input as a pdf first and print out the text content of the pdf
 st.subheader("First upload your PDF, before you can ask any questions about it.")
