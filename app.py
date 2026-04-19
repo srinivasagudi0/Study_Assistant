@@ -83,6 +83,9 @@ def modes():
             explanation = explain_text(text)
             st.subheader("Explanation:")
             st.write(explanation)
+            # add a button to download the explanation as a text file
+            if st.download_button("Download Explanation", explanation, file_name="explanation.txt"):
+                st.success("Explanation downloaded successfully!")
     if mode == "Trick Question":
         st.write("Trick Question mode selected.")
         if st.button("Generate trick questions"):
@@ -91,6 +94,9 @@ def modes():
                 trick_qs = trick_questions(text)
                 st.subheader("Trick Questions:")
                 st.write(trick_qs)
+                    # add a button to download the trick questions as a text file
+                if st.download_button("Download Trick Questions", trick_qs, file_name="trick_questions.txt"):
+                    st.success("Trick questions downloaded successfully!")
     ## chat operation mode!
     if mode == "chat":
         st.write("Chat mode selected.")
