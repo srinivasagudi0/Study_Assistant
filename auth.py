@@ -82,7 +82,7 @@ def authenticate(username, password):
 # THought this would be cool so addinf change password function
 def change_password(username, old_password, new_password):
     username = clean_username(username)
-    if not usernameor not old_password or not new_password:
+    if not username or not old_password or not new_password:
         return False
     if not authenticate(username, old_password):
         return False
