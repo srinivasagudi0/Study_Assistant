@@ -3,6 +3,7 @@ import random
 import auth
 from support import pdf_to_text, trick_questions
 from support import summarize_text, generate_flashcards, explain_text, chat_with_assistant
+import time
 
 st.title("Smart Study Copilot")
 
@@ -179,6 +180,14 @@ def modes():
         minutes = st.slider("Enter focus time in minutes:", min_value=1, max_value=120, value=25)
         if st.button("Start Focus Timer"):
             st.success(f"Focus timer started for {minutes} minutes. Stay focused!")
+            # simple countdown timer
+            st.progress(0)
+            # shluld work without freezing the UI since we're sleeping in small increments and updating the progress bar each time
+            for i in range(minutes * 60):
+                time.sleep(1)  # sleep for 10 seconds
+                st.progress((i + 1) / (minutes * 60))
+            st.success("Time's up! Take a break or start another session.")
+
 # idk this just does some super basic text stats… like counting words,
 # sentences, avg sentence length, nothing fancy at all. no api stuff,
 # literally just splitting strings and doing a couple sums. could prob
