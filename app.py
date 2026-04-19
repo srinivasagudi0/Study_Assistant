@@ -1,11 +1,76 @@
 import streamlit as st
 import random
+import auth
 from support import pdf_to_text, trick_questions
 from support import summarize_text, generate_flashcards, explain_text, chat_with_assistant
 
 st.title("Smart Study Copilot")
 
 st.header("Welcome to Smart Study Copilot!")
+
+def require_login() -> None:
+    auth.ensure_default_admin()  # defaults to admin/admin (override via env)
+
+    st.session_state.setdefault("authed", False)
+    st.session_state.setdefault("user", "")
+    # Clear widget state on next run (Streamlit forbids modifying widget keys after creation)
+    for key in st.session_state.pop("_clear_keys", []):
+        st.session_state[key] = ""
+
+    if st.session_state.authed:
+        with st.sidebar:
+            st.caption(f"Signed in as: {st.session_state.user or 'user'}")
+            with st.expander("Change password"):
+                old = st.text_input("Current password", type="password", key="pw_old")
+                new = st.text_input("New password", type="password", key="pw_new")
+                if st.button("Change password"):
+                    if auth.change_password(st.session_state.user, old, new):
+                        st.success("Password updated.")
+                        st.session_state["_clear_keys"] = ["pw_old", "pw_new"]
+                        st.rerun()
+                    else:
+                        st.error("Couldn’t update password. Check your current password.")
+            if st.button("Logout"):
+                st.session_state.authed = False
+                st.session_state.user = ""
+                st.rerun()
+        return
+
+    st.subheader("Welcome back")
+    tab_login, tab_create = st.tabs(["Sign in", "Create account"])
+
+    with tab_login:
+        username = st.text_input("Username", placeholder="admin", key="login_user")
+        password = st.text_input("Password", type="password", key="login_pw")
+        st.caption("Default login is admin / admin")
+        if st.button("Login", use_container_width=True):
+            if auth.authenticate(username, password):
+                st.session_state.authed = True
+                st.session_state.user = username.strip()
+                st.session_state["_clear_keys"] = ["login_pw"]
+                st.success("Signed in.")
+                st.rerun()
+            else:
+                st.error("That username/password didn’t match.")
+
+    with tab_create:
+        new_u = st.text_input("New username", key="create_user")
+        new_p = st.text_input("New password", type="password", key="create_pw")
+        if st.button("Create account", use_container_width=True):
+            try:
+                auth.create_user(new_u, new_p)
+                st.success("Account created. You can sign in now.")
+                st.session_state["_clear_keys"] = ["create_pw"]
+                st.rerun()
+            except ValueError:
+                st.error("Enter a username and password.")
+            except Exception:
+                st.error("That username is taken.")
+
+    st.stop()
+
+
+require_login()
 
 def modes():
     mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question", "chat"])
