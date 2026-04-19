@@ -1,6 +1,5 @@
 import streamlit as st
 import random
-
 from support import pdf_to_text, trick_questions
 from support import summarize_text, generate_flashcards, explain_text, chat_with_assistant
 
@@ -21,6 +20,9 @@ def modes():
                 summary = summarize_text(text)
             st.subheader("Summary:")
             st.write(summary)
+            if st.download_button("Download Summary", summary, file_name="summary.txt"):
+                st.success("Summary downloaded successfully!")
+            
     ### Flashcard Mode! 
     if mode == "Flashcard":
         st.write("Flashcard mode selected.")
