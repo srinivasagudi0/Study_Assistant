@@ -2,6 +2,7 @@
 
 # first task convert pdf to text
 import PyPDF2
+import ast
 
 def pdf_to_text(pdf_file):
     pdf_reader = PyPDF2.PdfReader(pdf_file)
@@ -39,8 +40,13 @@ def generate_flashcards(text):
             {"role": "user", "content": f"Generate flashcards from this text:\n\n{text}\n\n. Give atleast 5 flashcards. Or evem more but max is 15."}
         ]
     )
-    flashcards = response.choices[0].message.content
-    return flashcards
-
-a = generate_flashcards("Newtons 1stlaw")
-print(a)
+    content = (response.choices[0].message.content or "").strip()
+    try:
+        parsed = ast.literal_eval(content)
+        if isinstance(parsed, list):
+            cards = [(str(i[0]), str(i[1])) for i in parsed if isinstance(i, (list, tuple)) and len(i) == 2]
+            if cards:
+                return cards
+    except Exception:
+        pass
+    return [("Flashcards", content)]
