@@ -62,6 +62,14 @@ def modes():
         if st.button("Next Question"):
             st.session_state.i = (st.session_state.i + 1) % len(cards); st.rerun()
         st.caption(f"Score: {st.session_state.score}")
+    if mode == "Explain":
+        st.write("Explain mode selected.")
+        # for now we can just use the summary as the explanation, but in the future we can use a different model to generate explanations.
+        if st.button("Explain the text"):
+            with st.spinner("Generating explanation..."):
+                explanation = summarize_text(text)
+            st.subheader("Explanation:")
+            st.write(explanation)
                 
 # be able to take in user input as a pdf first and print out the text content of the pdf
 st.subheader("First upload your PDF, before you can ask any questions about it.")
