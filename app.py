@@ -2,14 +2,14 @@ import streamlit as st
 import random
 
 from support import pdf_to_text, trick_questions
-from support import summarize_text, generate_flashcards, explain_text
+from support import summarize_text, generate_flashcards, explain_text, chat_with_assistant
 
 st.title("Smart Study Copilot")
 
 st.header("Welcome to Smart Study Copilot!")
 
 def modes():
-    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question"])
+    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question", "chat"])
     # basically the home page.
     if mode == "Select a mode":
         st.write("Please select a mode to proceed.")
@@ -28,6 +28,7 @@ def modes():
         # for ddebugging
        
         if 'i' not in st.session_state: st.session_state.i = 0
+        
 
     # Display Current Card
         q, a = cards[st.session_state.i]
@@ -77,9 +78,16 @@ def modes():
                 trick_qs = trick_questions(text)
                 st.subheader("Trick Questions:")
                 st.write(trick_qs)
+    ## chat operation mode!
     if mode == "chat":
         st.write("Chat mode selected.")
-        st.write("This mode is still under development. Please check back later.")
+        # create a chat like interface where user can ask questions about the text and get answers based on the text using the chat_with_assistant function.
+        question = st.text_input("Ask a question about the text:")
+        if st.button("Ask"):
+            with st.spinner("Getting answer..."):
+                a = chat_with_assistant(text, question)
+                st.subheader("Answer:")
+                st.write(a)
                 
 # be able to take in user input as a pdf first and print out the text content of the pdf
 st.subheader("First upload your PDF, before you can ask any questions about it.")
