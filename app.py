@@ -73,7 +73,7 @@ def require_login() -> None:
 require_login()
 
 def modes():
-    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question", "chat", "doc stats"])
+    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain", "Trick Question", "chat", "doc stats", "Focus timer"])
     # basically the home page.
     if mode == "Select a mode":
         st.write("Please select a mode to proceed.")
@@ -173,6 +173,12 @@ def modes():
                 st.subheader("Answer:")
                 st.write(a)
 
+    if mode == "Focus timer":
+        st.write("Focus Timer mode selected.")
+        st.write("Set a timer to focus on your study material without distractions.")
+        minutes = st.slider("Enter focus time in minutes:", min_value=1, max_value=120, value=25)
+        if st.button("Start Focus Timer"):
+            st.success(f"Focus timer started for {minutes} minutes. Stay focused!")
 # idk this just does some super basic text stats… like counting words,
 # sentences, avg sentence length, nothing fancy at all. no api stuff,
 # literally just splitting strings and doing a couple sums. could prob
@@ -203,3 +209,4 @@ elif text_input:
     text = text_input
     st.write("Successfully received the text input. You can now move on.")
     modes()
+
