@@ -2,14 +2,14 @@ import streamlit as st
 import random
 
 from support import pdf_to_text
-from support import summarize_text, generate_flashcards
+from support import summarize_text, generate_flashcards, explain_text
 
 st.title("Smart Study Copilot")
 
 st.header("Welcome to Smart Study Copilot!")
 
 def modes():
-    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz"])
+    mode = st.selectbox("Mode", ["Select a mode","Summary", "Flashcard", "Quiz", "Explain"])
     # basically the home page.
     if mode == "Select a mode":
         st.write("Please select a mode to proceed.")
@@ -64,10 +64,9 @@ def modes():
         st.caption(f"Score: {st.session_state.score}")
     if mode == "Explain":
         st.write("Explain mode selected.")
-        # for now we can just use the summary as the explanation, but in the future we can use a different model to generate explanations.
-        if st.button("Explain the text"):
-            with st.spinner("Generating explanation..."):
-                explanation = summarize_text(text)
+        # now using explain_text function to explain the text.
+        with st.spinner("Generating explanation..."):
+            explanation = explain_text(text)
             st.subheader("Explanation:")
             st.write(explanation)
                 

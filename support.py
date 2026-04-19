@@ -50,3 +50,16 @@ def generate_flashcards(text):
     except Exception:
         pass
     return [("Flashcards", content)]
+
+
+def explain_text(text):
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o", # Made this gpt-4o since it is better at explanations, but you can change it if you want.
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that explains text for students. Be concise and clear. Be very simple and easy to understand."},
+            {"role": "user", "content": f"Please explain the following text: {text}"}
+        ]
+    )
+    explanation = response.choices[0].message.content
+    return explanation
