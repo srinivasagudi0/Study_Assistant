@@ -43,6 +43,11 @@ def modes():
         if st.button("Next"):
             st.session_state.i = (st.session_state.i + 1) % len(cards)
             st.rerun()
+        # add a button to download the flashcards as a text file
+        if st.button("Download Flashcards"):
+            flashcard_text = "\n".join([f"Q: {q}\nA: {a}\n" for q, a in cards])
+            if st.download_button("Download Flashcards", flashcard_text, file_name="flashcards.txt"):
+                st.success("Flashcards downloaded successfully!")
     ### Quiz Mode!
     if mode == "Quiz":
         st.write("Quiz mode selected.")
