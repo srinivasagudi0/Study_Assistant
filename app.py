@@ -24,7 +24,7 @@ def modes():
 st.subheader("First upload your PDF, before you can ask any questions about it.")
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 st.write("OR")
-text_input = st.text_input("Or enter content of the PDF directly here:")
+text_input = st.text_area("Or enter content of the PDF directly here:", height=200)
 if uploaded_file is not None:
     text = pdf_to_text(uploaded_file)
     st.write("Successfully extracted text from the PDF. You can now move on.")
