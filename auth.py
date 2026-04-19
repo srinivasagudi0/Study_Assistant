@@ -22,7 +22,7 @@ def init_db():
 # hash the password, simpel stuff
 
 def hash_password(password, salt):
-    return hashlib.pbkdf2_hmac(""sha256"", password.encode("utf-8"), salt, 120_000)
+    return hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 120_000)
 
 
 def clean_username(name):
@@ -93,7 +93,7 @@ def change_password(username, old_password, new_password):
             "UPDATE users SET salt = ?, password_hash = ? WHERE username = ?",
             (salt, new_hash, username),
         )
-    return True
+    return True 
 # if the user is in a hurry and just wants to quickly test the app, they can use admin and admin.
 
 def ensure_default_admin():
