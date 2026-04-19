@@ -92,56 +92,60 @@ def modes():
     ### Flashcard Mode! 
     if mode == "Flashcard":
         st.write("Flashcard mode selected.")
-        cards = generate_flashcards(text)
-        # for ddebugging
-       
-        if 'i' not in st.session_state: st.session_state.i = 0
-        
+        if st.button("Generate flashcards"):
+            with st.spinner("Generating flashcards..."):
+                cards = generate_flashcards(text)
+                # for ddebugging
+            
+                if 'i' not in st.session_state: st.session_state.i = 0
+                
 
-    # Display Current Card
-        q, a = cards[st.session_state.i]
-        st.subheader(f"Question: {q}")
+            # Display Current Card
+                q, a = cards[st.session_state.i]
+                st.subheader(f"Question: {q}")
 
-        if st.button("Show Answer"):
-            st.write(f"Answer: {a}")
+                if st.button("Show Answer"):
+                    st.write(f"Answer: {a}")
 
-        # Navigation
-        if st.button("Next"):
-            st.session_state.i = (st.session_state.i + 1) % len(cards)
-            st.rerun()
-        # add a button to download the flashcards as a text file
-        if st.button("Download Flashcards"):
-            flashcard_text = "\n".join([f"Q: {q}\nA: {a}\n" for q, a in cards])
-            if st.download_button("Download Flashcards", flashcard_text, file_name="flashcards.txt"):
-                st.success("Flashcards downloaded successfully!")
+                # Navigation
+                if st.button("Next"):
+                    st.session_state.i = (st.session_state.i + 1) % len(cards)
+                    st.rerun()
+                # add a button to download the flashcards as a text file
+                if st.button("Download Flashcards"):
+                    flashcard_text = "\n".join([f"Q: {q}\nA: {a}\n" for q, a in cards])
+                    if st.download_button("Download Flashcards", flashcard_text, file_name="flashcards.txt"):
+                        st.success("Flashcards downloaded successfully!")
     ### Quiz Mode!
     if mode == "Quiz":
         st.write("Quiz mode selected.")
-        cards = generate_flashcards(text)
-        if 'i' not in st.session_state: st.session_state.i = 0
-        if 'score' not in st.session_state: st.session_state.score = 0
-        q, a = cards[st.session_state.i]
-        if 'opts_i' not in st.session_state or st.session_state.opts_i != st.session_state.i:
-            distractors = [ans for _, ans in cards if ans != a]
-            opts = [a] + random.sample(distractors, k=min(3, len(distractors)))
-            random.shuffle(opts); st.session_state.opts, st.session_state.opts_i = opts, st.session_state.i
-        st.write(f"Question: {q}")
-        choice = st.radio("Choose one:", st.session_state.opts, index=None)
-        if st.button("Check"):
-            if choice is None: st.warning("Pick an option first.")
-            else:
-                ok = (choice == a)
-                if ok: st.session_state.score += 1; st.success("Right!")
-                else: st.error(f"Wrong. Correct answer: {a}")
-        if st.button("Next Question"):
-            st.session_state.i = (st.session_state.i + 1) % len(cards); st.rerun()
-        st.caption(f"Score: {st.session_state.score}")
+        if st.button("Generate quiz"):
+            with st.spinner("Generating quiz..."):
+                cards = generate_flashcards(text)
+                if 'i' not in st.session_state: st.session_state.i = 0
+                if 'score' not in st.session_state: st.session_state.score = 0
+                q, a = cards[st.session_state.i]
+                if 'opts_i' not in st.session_state or st.session_state.opts_i != st.session_state.i:
+                    distractors = [ans for _, ans in cards if ans != a]
+                    opts = [a] + random.sample(distractors, k=min(3, len(distractors)))
+                    random.shuffle(opts); st.session_state.opts, st.session_state.opts_i = opts, st.session_state.i
+                st.write(f"Question: {q}")
+                choice = st.radio("Choose one:", st.session_state.opts, index=None)
+                if st.button("Check"):
+                    if choice is None: st.warning("Pick an option first.")
+                    else:
+                        ok = (choice == a)
+                        if ok: st.session_state.score += 1; st.success("Right!")
+                        else: st.error(f"Wrong. Correct answer: {a}")
+                if st.button("Next Question"):
+                    st.session_state.i = (st.session_state.i + 1) % len(cards); st.rerun()
+                st.caption(f"Score: {st.session_state.score}")
 
-        # add a button to download the quiz questions and answers as a text file
-        if st.button("Download Quiz"):
-            quiz_text = "\n".join([f"Q: {q}\nA: {a}\n" for q, a in cards])
-            if st.download_button("Download Quiz", quiz_text, file_name="quiz.txt"):
-                st.success("Quiz downloaded successfully!")
+                # add a button to download the quiz questions and answers as a text file
+                if st.button("Download Quiz"):
+                    quiz_text = "\n".join([f"Q: {q}\nA: {a}\n" for q, a in cards])
+                    if st.download_button("Download Quiz", quiz_text, file_name="quiz.txt"):
+                        st.success("Quiz downloaded successfully!")
     if mode == "Explain":
         st.write("Explain mode selected.")
         # now using explain_text function to explain the text.
