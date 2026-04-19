@@ -145,13 +145,14 @@ def modes():
     if mode == "Explain":
         st.write("Explain mode selected.")
         # now using explain_text function to explain the text.
-        with st.spinner("Generating explanation..."):
-            explanation = explain_text(text)
-            st.subheader("Explanation:")
-            st.write(explanation)
-            # add a button to download the explanation as a text file
-            if st.download_button("Download Explanation", explanation, file_name="explanation.txt"):
-                st.success("Explanation downloaded successfully!")
+        if st.button("Generate explanation"):
+            with st.spinner("Generating explanation..."):
+                explanation = explain_text(text)
+                st.subheader("Explanation:")
+                st.write(explanation)
+                # add a button to download the explanation as a text file
+                if st.download_button("Download Explanation", explanation, file_name="explanation.txt"):
+                    st.success("Explanation downloaded successfully!")
     if mode == "Trick Question":
         st.write("Trick Question mode selected.")
         if st.button("Generate trick questions"):
