@@ -1,6 +1,7 @@
 import streamlit as st
+
 from support import pdf_to_text
-from support import summarize_text
+from support import summarize_text, generate_flashcards
 
 st.title("Smart Study Copilot")
 
@@ -19,19 +20,26 @@ def modes():
                 summary = summarize_text(text)
             st.subheader("Summary:")
             st.write(summary)
-    ### Flashcard Mode! (Work in progress)
-    '''
+    ### Flashcard Mode! Will fix this Later
     if mode == "Flashcard":
         st.write("Flashcard mode selected.")
-        if st.button("Generate Flashcards"):
-            with st.spinner("Generating flashcards..."):
-                flashcards = generate_flashcards(text)
-            st.subheader("Flashcards:")
-            for card in flashcards:
-                st.write(card)
-    '''
-    if mode == "Flashcard":
-        st.write("Still under Devlopement")
+        cards = generate_flashcards(text)
+        # for ddebugging
+       
+        if 'i' not in st.session_state: st.session_state.i = 0
+
+    # Display Current Card
+        q, a = cards[st.session_state.i]
+        st.subheader(f"Question: {q}")
+
+        if st.button("Show Answer"):
+            st.write(f"Answer: {a}")
+
+        # Navigation
+        if st.button("Next"):
+            st.session_state.i = (st.session_state.i + 1) % len(cards)
+            st.rerun()
+        
                 
 # be able to take in user input as a pdf first and print out the text content of the pdf
 st.subheader("First upload your PDF, before you can ask any questions about it.")
@@ -47,4 +55,3 @@ elif text_input:
     text = text_input
     st.write("Successfully received the text input. You can now move on.")
     modes()
-
