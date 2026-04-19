@@ -1,5 +1,6 @@
 import streamlit as st
 from support import pdf_to_text
+from support import summarize_text
 
 st.title("Smart Study Copilot")
 
@@ -11,9 +12,15 @@ uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 if uploaded_file is not None:
     text = pdf_to_text(uploaded_file)
     st.write("Successfully extracted text from the PDF. You can now move on.")
-    mode = st.selectbox("Mode", ["Summary"])
+    mode = st.selectbox("Mode", ["Select a mode","Summary"])
+    if mode == "Select a mode":
+        st.write("Please select a mode to proceed.")
     if mode == "Summary":
         st.write("Summary mode selected.")
-        # call openai api to summarize the text and print out the summary (choose a small llm mode)
-        # for now just print out the text content of the pdf to make sure the pdf to text conversion works
-        st.write(text)
+        if st.button("Summarize the text"):
+            with st.spinner("Summarizing the text..."):
+                summary = summarize_text(text)
+            st.subheader("Summary:")
+            st.write(summary)
+
+
