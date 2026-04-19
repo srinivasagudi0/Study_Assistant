@@ -16,3 +16,6 @@ You upload a PDF or paste your notes, and it can summarize them, make flashcards
 ## AI declaration
 
 - I used GitHub Copilot suggestions while writing the authentication module (auth.py). The OpenAI API (gpt-3.5-turbo and gpt-4o) powers all the study features — summarization, flashcards, quizzes, explanations, trick questions, and chat. The core app logic in app.py, the PDF extraction, and the quiz scorin, authentication were written by me without AI help.
+
+## Live Demo
+https://studyassistant-afewdsxadbbxupzr8gxg2a.streamlit.app/
